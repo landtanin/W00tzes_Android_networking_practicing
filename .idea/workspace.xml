@@ -24,10 +24,7 @@
       <change beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wootzes.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Wootzes.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/app/Injection.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/app/Injection.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicRepository.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicRepository.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicUtils.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicUtils.kt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -85,8 +82,8 @@
           <file leaf-file-name="BasicUtils.kt" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicUtils.kt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="165">
-                  <caret line="12" column="58" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
+                <state relative-caret-position="212">
+                  <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
                   <folding>
                     <element signature="e#53#331#0" expanded="true" />
                   </folding>
@@ -97,8 +94,8 @@
           <file leaf-file-name="BasicRepository.kt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicRepository.kt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="150">
-                  <caret line="36" selection-start-line="36" selection-end-line="36" />
+                <state relative-caret-position="258">
+                  <caret line="111" selection-start-line="111" selection-end-line="111" />
                   <folding>
                     <element signature="e#53#460#0" expanded="true" />
                   </folding>
@@ -158,8 +155,8 @@
           <file leaf-file-name="BasicRepository.kt" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicRepository.kt">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1214">
-                  <caret line="92" column="2" selection-start-line="92" selection-start-column="2" selection-end-line="92" selection-end-column="2" />
+                <state relative-caret-position="416">
+                  <caret line="67" column="6" selection-start-line="67" selection-start-column="6" selection-end-line="69" selection-end-column="5" />
                   <folding>
                     <element signature="e#53#460#0" expanded="true" />
                   </folding>
@@ -2447,11 +2444,11 @@
       <window_info id="Build Variants" order="2" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.37526882" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.26451612" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.26344085" />
       <window_info anchor="right" id="Flutter Outline" order="3" />
-      <window_info active="true" anchor="bottom" id="Logcat" order="7" visible="true" weight="0.26666668" />
+      <window_info anchor="bottom" id="Logcat" order="7" weight="0.26666668" />
       <window_info id="Captures" order="2" weight="0.25" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -2478,31 +2475,6 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicRepository.kt</url>
-          <line>56</line>
-          <properties />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicRepository.kt</url>
-          <line>58</line>
-          <properties />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicRepository.kt</url>
-          <line>73</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicRepository.kt</url>
-          <line>75</line>
-          <properties />
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="4" />
     </breakpoint-manager>
   </component>
@@ -2690,8 +2662,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicUtils.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="12" column="58" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
+        <state relative-caret-position="212">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
           <folding>
             <element signature="e#53#331#0" expanded="true" />
           </folding>
@@ -2700,8 +2672,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/raywenderlich/android/w00tze/repository/BasicRepository.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        <state relative-caret-position="258">
+          <caret line="111" selection-start-line="111" selection-end-line="111" />
           <folding>
             <element signature="e#53#460#0" expanded="true" />
           </folding>

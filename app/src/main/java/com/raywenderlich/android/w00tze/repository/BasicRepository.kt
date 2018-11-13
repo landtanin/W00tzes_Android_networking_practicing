@@ -9,6 +9,8 @@ import com.raywenderlich.android.w00tze.app.Constants.fullUrlString
 import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.model.Repo
 import com.raywenderlich.android.w00tze.model.User
+import org.json.JSONArray
+import org.json.JSONException
 import java.io.IOException
 
 object BasicRepository : Repository {
@@ -59,21 +61,26 @@ object BasicRepository : Repository {
       val url = Uri.parse(fullUrlString("/users/$LOGIN/repos")).toString()
       val jsonString = getUrlAsString(url)
 
-      Log.i(TAG, "repo data: $jsonString")
-
-      val repos = mutableListOf<Repo>()
-
-      for (i in 0 until 100) {
-        val repo = Repo("repo name")
-        repos.add(repo)
-      }
-
-      return repos
+      return parseRepo(jsonString)
 
     } catch (e: IOException) {
       Log.e(TAG, "Error trieving repo ${e.localizedMessage}")
+    } catch (e: JSONException) {
+      Log.e(TAG, "Error parsing json ${e.localizedMessage}")
     }
     return null
+  }
+
+  private fun parseRepo(jsonString: String): List<Repo> {
+    val repos = mutableListOf<Repo>()
+
+    val jsonArray = JSONArray(jsonString)
+    for (i in 0 until jsonArray.length()) {
+      val repoObject = jsonArray.getJSONObject(i)
+      repos.add(Repo(repoObject.getString("name")))
+    }
+
+    return repos
   }
 
   private class FetchReposAsyncTask(val callback: ReposCallback) : AsyncTask<ReposCallback, Void, List<Repo>>() {
@@ -86,25 +93,32 @@ object BasicRepository : Repository {
     }
   }
 
+  private fun parseGist(jsonString: String): List<Gist> {
+    val gists = mutableListOf<Gist>()
+
+    val jsonArray = JSONArray(jsonString)
+    for (i in 0 until jsonArray.length()) {
+      val gistObject = jsonArray.getJSONObject(i)
+      val createdAt = gistObject.getString("created_at")
+      val des = gistObject.getString("description")
+      gists.add(Gist(createdAt, des))
+    }
+
+    return gists
+  }
+
   fun fetchGist(): List<Gist>? {
     try {
 
       val url = Uri.parse(fullUrlString("/users/$LOGIN/gists")).toString()
       val jsonString = getUrlAsString(url)
-
-      Log.i(TAG, "gists data: $jsonString")
-
-      val gists = mutableListOf<Gist>()
-
-      for (i in 0 until 100) {
-        val gist = Gist("2018-02-23T17:42:52Z", "w00t")
-        gists.add(gist)
-      }
-
-      return gists
+      Log.d(TAG, "gists data: $jsonString")
+      return parseGist(jsonString)
 
     } catch (e: IOException) {
       Log.e(TAG, "Error retrieving gists ${e.localizedMessage}")
+    } catch (e: JSONException) {
+      Log.e(TAG, "Error parsing json ${e.localizedMessage}")
     }
     return null
   }
