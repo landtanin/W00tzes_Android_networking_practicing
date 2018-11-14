@@ -6,11 +6,13 @@ import android.net.Uri
 import android.os.AsyncTask
 import android.util.Log
 import com.raywenderlich.android.w00tze.app.Constants.fullUrlString
+import com.raywenderlich.android.w00tze.app.isNullOrBlanckOrNullString
 import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.model.Repo
 import com.raywenderlich.android.w00tze.model.User
 import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
 import java.io.IOException
 
 object BasicRepository : Repository {
@@ -20,22 +22,22 @@ object BasicRepository : Repository {
   private const val LOGIN = "w00tze"
 
   override fun getRepos(): LiveData<List<Repo>> {
-    val result = MutableLiveData<List<Repo>>()
+    val liveData = MutableLiveData<List<Repo>>()
 
-    FetchReposAsyncTask { repos ->
-      result.value = repos
+    FetchAsyncTask("/users/$LOGIN/repos", ::parseRepo) { repos ->
+      liveData.value = repos
     }.execute()
 
-    return result
+    return liveData
 
   }
 
   override fun getGists(): LiveData<List<Gist>> {
     val liveData = MutableLiveData<List<Gist>>()
 
-    FetchGistsAsyncTask({gists ->
+    FetchAsyncTask("/users/$LOGIN/gists", ::parseGist) { gists ->
       liveData.value = gists
-    }).execute()
+    }.execute()
 
     return liveData
   }
@@ -43,35 +45,14 @@ object BasicRepository : Repository {
   override fun getUser(): LiveData<User> {
     val liveData = MutableLiveData<User>()
 
-    val user = User(
-        1234L,
-        "w00tze",
-        "w00tze",
-        "W00tzeWootze",
-        "https://avatars0.githubusercontent.com/u/36771440?v=4")
-
-    liveData.value = user
+    FetchAsyncTask("/users/$LOGIN", ::parseUser) { user ->
+      liveData.value = user
+    }.execute()
 
     return liveData
   }
 
-  fun fetchRepo(): List<Repo>? {
-    try {
-
-      val url = Uri.parse(fullUrlString("/users/$LOGIN/repos")).toString()
-      val jsonString = getUrlAsString(url)
-
-      return parseRepo(jsonString)
-
-    } catch (e: IOException) {
-      Log.e(TAG, "Error trieving repo ${e.localizedMessage}")
-    } catch (e: JSONException) {
-      Log.e(TAG, "Error parsing json ${e.localizedMessage}")
-    }
-    return null
-  }
-
-  private fun parseRepo(jsonString: String): List<Repo> {
+  fun parseRepo(jsonString: String): List<Repo> {
     val repos = mutableListOf<Repo>()
 
     val jsonArray = JSONArray(jsonString)
@@ -81,16 +62,6 @@ object BasicRepository : Repository {
     }
 
     return repos
-  }
-
-  private class FetchReposAsyncTask(val callback: ReposCallback) : AsyncTask<ReposCallback, Void, List<Repo>>() {
-    override fun doInBackground(vararg params: ReposCallback?): List<Repo>? = fetchRepo()
-
-    override fun onPostExecute(result: List<Repo>?) {
-      if (result != null) {
-        callback(result)
-      }
-    }
   }
 
   private fun parseGist(jsonString: String): List<Gist> {
@@ -107,30 +78,53 @@ object BasicRepository : Repository {
     return gists
   }
 
-  fun fetchGist(): List<Gist>? {
+  private fun parseUser(jsonString: String): User {
+
+    val user = JSONObject(jsonString)
+
+    val id = user.getLong("id")
+    val name = if (user.getString("name").isNullOrBlanckOrNullString()) "" else user.getString("name")
+    val login = user.getString("login")
+    val company = if (user.getString("company").isNullOrBlanckOrNullString()) "" else user.getString("company")
+    val avatarUrl = user.getString("avatar_url")
+
+    return User(
+        id, name, login, company, avatarUrl
+    )
+
+  }
+
+  fun <T> fetch(uriPath: String, parser: (String) -> T): T? {
+
     try {
 
-      val url = Uri.parse(fullUrlString("/users/$LOGIN/gists")).toString()
+      val url = Uri.parse(fullUrlString(uriPath)).toString()
       val jsonString = getUrlAsString(url)
-      Log.d(TAG, "gists data: $jsonString")
-      return parseGist(jsonString)
+      return parser(jsonString)
 
     } catch (e: IOException) {
-      Log.e(TAG, "Error retrieving gists ${e.localizedMessage}")
+      Log.e(TAG, "Error trieving path: $uriPath ::: ${e.localizedMessage}")
     } catch (e: JSONException) {
-      Log.e(TAG, "Error parsing json ${e.localizedMessage}")
+      Log.e(TAG, "Error trieving path: $uriPath ::: ${e.localizedMessage}")
     }
     return null
   }
 
-  private class FetchGistsAsyncTask(val callback: GistsCallback) : AsyncTask<GistsCallback, Void, List<Gist>>() {
-    override fun doInBackground(vararg params: GistsCallback?): List<Gist>? = fetchGist()
 
-    override fun onPostExecute(result: List<Gist>?) {
+  private class FetchAsyncTask<T>(val path: String,
+                                  val parser: (String) -> T,
+                                  val callback: (T) -> Unit)
+    : AsyncTask<(T) -> Unit, Void, T>() {
+    override fun doInBackground(vararg params: ((T) -> Unit)?): T? {
+      return fetch(path, parser)
+    }
+
+    override fun onPostExecute(result: T?) {
       if (result != null) {
         callback(result)
       }
     }
+
   }
 
 }

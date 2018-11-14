@@ -2,15 +2,13 @@ package com.raywenderlich.android.w00tze.repository
 
 import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.model.Repo
+import com.raywenderlich.android.w00tze.model.User
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
-
-internal typealias ReposCallback = (repos: List<Repo>) -> Unit
-internal typealias GistsCallback = (gists: List<Gist>) -> Unit
 
 @Throws(IOException::class)
 internal fun getUrlAsString(urlAddress: String): String {
