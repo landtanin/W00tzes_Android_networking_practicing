@@ -2,21 +2,16 @@ package com.raywenderlich.android.w00tze.repository
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.net.Uri
-import android.os.AsyncTask
-import android.util.Log
-import com.raywenderlich.android.w00tze.app.Constants.fullUrlString
 import com.raywenderlich.android.w00tze.app.Injection
 import com.raywenderlich.android.w00tze.app.isNullOrBlanckOrNullString
 import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.model.Repo
 import com.raywenderlich.android.w00tze.model.User
 import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
-import java.io.IOException
 
 object RemoteRepository : Repository {
 
@@ -46,9 +41,15 @@ object RemoteRepository : Repository {
   override fun getGists(): LiveData<List<Gist>> {
     val liveData = MutableLiveData<List<Gist>>()
 
-    FetchAsyncTask("/users/$LOGIN/gists", ::parseGist) { gists ->
-      liveData.value = gists
-    }.execute()
+    api.getGists(LOGIN).enqueue(object: Callback<List<Gist>>{
+      override fun onResponse(call: Call<List<Gist>>, response: Response<List<Gist>>) {
+        liveData.value = emptyList()
+      }
+
+      override fun onFailure(call: Call<List<Gist>>, t: Throwable) {
+
+      }
+    })
 
     return liveData
   }
@@ -56,9 +57,19 @@ object RemoteRepository : Repository {
   override fun getUser(): LiveData<User> {
     val liveData = MutableLiveData<User>()
 
-    FetchAsyncTask("/users/$LOGIN", ::parseUser) { user ->
-      liveData.value = user
-    }.execute()
+//    FetchAsyncTask("/users/$LOGIN", ::parseUser) { user ->
+//      liveData.value = user
+//    }.execute()
+
+    api.getUser(LOGIN).enqueue(object: Callback<User> {
+      override fun onResponse(call: Call<User>, response: Response<User>) {
+//        liveData.value = Unit()
+      }
+
+      override fun onFailure(call: Call<User>, t: Throwable) {
+
+      }
+    })
 
     return liveData
   }
@@ -104,38 +115,4 @@ object RemoteRepository : Repository {
     )
 
   }
-
-  fun <T> fetch(uriPath: String, parser: (String) -> T): T? {
-
-    try {
-
-      val url = Uri.parse(fullUrlString(uriPath)).toString()
-      val jsonString = getUrlAsString(url)
-      return parser(jsonString)
-
-    } catch (e: IOException) {
-      Log.e(TAG, "Error trieving path: $uriPath ::: ${e.localizedMessage}")
-    } catch (e: JSONException) {
-      Log.e(TAG, "Error trieving path: $uriPath ::: ${e.localizedMessage}")
-    }
-    return null
-  }
-
-
-  private class FetchAsyncTask<T>(val path: String,
-                                  val parser: (String) -> T,
-                                  val callback: (T) -> Unit)
-    : AsyncTask<(T) -> Unit, Void, T>() {
-    override fun doInBackground(vararg params: ((T) -> Unit)?): T? {
-      return fetch(path, parser)
-    }
-
-    override fun onPostExecute(result: T?) {
-      if (result != null) {
-        callback(result)
-      }
-    }
-
-  }
-
 }
