@@ -23,7 +23,7 @@ object RemoteRepository : Repository {
 
     api.getRepos(LOGIN).enqueue(object: retrofit2.Callback<List<Repo>> {
       override fun onResponse(call: Call<List<Repo>>, response: Response<List<Repo>>) {
-        liveData.value = emptyList()
+        liveData.value = response.body()
       }
 
       override fun onFailure(call: Call<List<Repo>>, t: Throwable) {
@@ -58,7 +58,7 @@ object RemoteRepository : Repository {
 
     api.getUser(LOGIN).enqueue(object: Callback<User> {
       override fun onResponse(call: Call<User>, response: Response<User>) {
-
+        liveData.value = response.body()
       }
 
       override fun onFailure(call: Call<User>, t: Throwable) {
