@@ -31,10 +31,17 @@
 
 package com.raywenderlich.android.w00tze.app
 
-import com.raywenderlich.android.w00tze.repository.BasicRepository
+import com.raywenderlich.android.w00tze.repository.RemoteRepository
 import com.raywenderlich.android.w00tze.repository.Repository
+import retrofit2.Retrofit
 
 
 object Injection {
-  fun provideRepository(): Repository = BasicRepository
+  fun provideRepository(): Repository = RemoteRepository
+
+  fun provideRetrofit(): Retrofit {
+    return Retrofit.Builder()
+        .baseUrl("https://api.github.com/")
+        .build()
+  }
 }
