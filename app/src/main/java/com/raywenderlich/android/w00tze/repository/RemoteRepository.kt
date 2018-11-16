@@ -14,7 +14,7 @@ object RemoteRepository : Repository {
 
   private const val TAG = "RemoteRepository"
 
-  private const val LOGIN = "w00tze"
+  private const val LOGIN = "landtanin"
 
   private val api = Injection.provideGitHubApi()
 
@@ -55,18 +55,20 @@ object RemoteRepository : Repository {
     return liveData
   }
 
-  override fun getUser(): LiveData<User> {
-    val liveData = MutableLiveData<User>()
+  override fun getUser(): LiveData<Either<User>> {
+    val liveData = MutableLiveData<Either<User>>()
 
     api.getUser(LOGIN).enqueue(object: Callback<User> {
       override fun onResponse(call: Call<User>, response: Response<User>) {
-        if (response != null) {
-          liveData.value = response.body()
+        if (response != null && response.isSuccessful) {
+          liveData.value = Either.success(response.body())
+        } else {
+          liveData.value = Either.error(ApiError.USER, null)
         }
       }
 
       override fun onFailure(call: Call<User>, t: Throwable) {
-
+        liveData.value = Either.error(ApiError.USER, null)
       }
     })
 

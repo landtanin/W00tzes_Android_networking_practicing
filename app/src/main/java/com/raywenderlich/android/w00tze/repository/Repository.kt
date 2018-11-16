@@ -39,6 +39,6 @@ import com.raywenderlich.android.w00tze.model.User
 interface Repository {
   fun getRepos(): LiveData<List<Repo>>
   fun getGists(): LiveData<List<Gist>>
-  fun getUser(): LiveData<User>
+  fun getUser(): LiveData<Either<User>>
 }
 

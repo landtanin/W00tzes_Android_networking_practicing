@@ -38,8 +38,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.raywenderlich.android.w00tze.R
 import com.raywenderlich.android.w00tze.model.User
+import com.raywenderlich.android.w00tze.repository.ApiError
+import com.raywenderlich.android.w00tze.repository.Either
+import com.raywenderlich.android.w00tze.repository.Status
 import com.raywenderlich.android.w00tze.viewmodel.ProfileViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -60,13 +64,20 @@ class ProfileFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    profileViewModel.getUser().observe(this, Observer<User> { user ->
-      if (user != null) {
+    profileViewModel.getUser().observe(this, Observer<Either<User>> { either ->
+
+      if (either?.status == Status.SUCCESS && either.data != null) {
+        val user = either.data
         login.text = String.format(getString(R.string.screen_name_format), user.login)
         repoName.text = user.name
         company.text = user.company
         Picasso.with(context).load(user.avatarUrl).into(avatar)
+      } else {
+        if (either?.error == ApiError.USER) {
+          Toast.makeText(context, "Error retrieving user", Toast.LENGTH_LONG).show()
+        }
       }
+
     })
 
     val onClickListener = View.OnClickListener {
