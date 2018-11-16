@@ -40,8 +40,12 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.raywenderlich.android.w00tze.R
 import com.raywenderlich.android.w00tze.model.Gist
+import com.raywenderlich.android.w00tze.repository.ApiError
+import com.raywenderlich.android.w00tze.repository.Either
+import com.raywenderlich.android.w00tze.repository.Status
 import com.raywenderlich.android.w00tze.viewmodel.GistsViewModel
 import kotlinx.android.synthetic.main.fragment_gists.*
 
@@ -69,8 +73,15 @@ class GistsFragment : Fragment(), GistAdapter.GistAdapterListener {
     val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(adapter))
     itemTouchHelper.attachToRecyclerView(gistsRecyclerView)
 
-    gistsViewModel.getGists().observe(this, Observer<List<Gist>> { gists ->
-      adapter.updateGists(gists ?: emptyList())
+    gistsViewModel.getGists().observe(this, Observer<Either<List<Gist>>> { either ->
+
+      if (either?.status == Status.SUCCESS && either.data != null) {
+        adapter.updateGists(either.data)
+      } else {
+        if (either?.error == ApiError.GISTS) {
+          Toast.makeText(context, "Error retrieving gists", Toast.LENGTH_LONG).show()
+        }
+      }
     })
 
     fab.setOnClickListener {
