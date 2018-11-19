@@ -3,6 +3,7 @@ package com.raywenderlich.android.w00tze.repository
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.raywenderlich.android.w00tze.app.Injection
+import com.raywenderlich.android.w00tze.model.AuthenticationPrefs
 import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.model.Repo
 import com.raywenderlich.android.w00tze.model.User
@@ -14,7 +15,7 @@ object RemoteRepository : Repository {
 
   private const val TAG = "RemoteRepository"
 
-  private const val LOGIN = "landtanin"
+  private val LOGIN = AuthenticationPrefs.getUsername()
 
   private val api = Injection.provideGitHubApi()
 
