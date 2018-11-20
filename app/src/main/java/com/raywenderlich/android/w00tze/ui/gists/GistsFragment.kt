@@ -37,6 +37,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -94,6 +95,15 @@ class GistsFragment : Fragment(), GistAdapter.GistAdapterListener {
   }
 
   internal fun sendGist(description: String, filename: String, content: String) {
-    println("Sending gist: $description - $filename - $content")
+    gistsViewModel.sendGist(description, filename, content).observe(this, Observer<Either<Gist>> { either ->
+      Log.d(javaClass.simpleName, "status = ${either?.status}")
+      if (either?.status == Status.SUCCESS && either.data != null) {
+        adapter.addGist(either.data)
+      } else {
+        if (either?.error == ApiError.POST_GIST) {
+          Toast.makeText(context, "Error posting gists", Toast.LENGTH_SHORT).show()
+        }
+      }
+    })
   }
 }

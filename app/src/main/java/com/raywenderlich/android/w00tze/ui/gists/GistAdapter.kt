@@ -61,6 +61,11 @@ class GistAdapter(private val gists: MutableList<Gist>, private val listener: Gi
     notifyDataSetChanged()
   }
 
+  fun addGist(gist: Gist) {
+    this.gists.add(0, gist)
+    notifyItemInserted(0)
+  }
+
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.bind(gists[position])
   }

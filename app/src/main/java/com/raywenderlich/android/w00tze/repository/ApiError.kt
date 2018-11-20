@@ -3,5 +3,6 @@ package com.raywenderlich.android.w00tze.repository
 enum class ApiError {
   USER,
   REPOS,
-  GISTS
+  GISTS,
+  POST_GIST
 }
