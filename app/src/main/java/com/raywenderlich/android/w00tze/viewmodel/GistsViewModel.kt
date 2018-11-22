@@ -35,6 +35,7 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import com.raywenderlich.android.w00tze.app.Injection
+import com.raywenderlich.android.w00tze.model.EmptyResponse
 import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.model.GistFile
 import com.raywenderlich.android.w00tze.model.GistRequest
@@ -50,8 +51,12 @@ class GistsViewModel(application: Application) : AndroidViewModel(application) {
   fun sendGist(description: String, filename: String, content: String): LiveData<Either<Gist>> {
     val gistFile = GistFile(content)
     val gistFiles = mapOf(filename to gistFile)
-    val request = GistRequest(gistFiles)
+    val request = GistRequest(gistFiles, true, description)
 
     return repository.postGist(request)
+  }
+
+  fun deleteGist(gist: Gist): LiveData<Either<EmptyResponse>> {
+    return repository.deleteGist(gist)
   }
 }

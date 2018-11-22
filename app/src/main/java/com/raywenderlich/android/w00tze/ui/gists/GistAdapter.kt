@@ -31,6 +31,7 @@
 
 package com.raywenderlich.android.w00tze.ui.gists
 
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +40,7 @@ import com.raywenderlich.android.w00tze.app.inflate
 import com.raywenderlich.android.w00tze.model.Gist
 import kotlinx.android.synthetic.main.list_item_gist.view.*
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 
 class GistAdapter(private val gists: MutableList<Gist>, private val listener: GistAdapterListener)
@@ -66,6 +67,17 @@ class GistAdapter(private val gists: MutableList<Gist>, private val listener: Gi
     notifyItemInserted(0)
   }
 
+  fun deleteGist(gist: Gist) {
+    val updatedGists = mutableListOf<Gist>()
+    updatedGists.addAll(gists)
+    updatedGists.remove(gist)
+
+    val diffCallback = GistDiffCallback(this.gists, updatedGists)
+    val diffResult = DiffUtil.calculateDiff(diffCallback)
+    diffResult.dispatchUpdatesTo(this)
+
+  }
+
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.bind(gists[position])
   }
@@ -80,7 +92,7 @@ class GistAdapter(private val gists: MutableList<Gist>, private val listener: Gi
 
     fun bind(gist: Gist) {
       this.gist = gist
-      itemView.gistDescription.text = gist.description
+      itemView.gistDescription.text = "${gist.description}, files = ${gist.files.size}"
       itemView.gistCreatedAt.text = DATE_FORMATTER.format(gist.createdAt)
     }
   }

@@ -3,7 +3,12 @@ package com.raywenderlich.android.w00tze.repository
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.raywenderlich.android.w00tze.app.Injection
-import com.raywenderlich.android.w00tze.model.*
+import com.raywenderlich.android.w00tze.model.AuthenticationPrefs
+import com.raywenderlich.android.w00tze.model.EmptyResponse
+import com.raywenderlich.android.w00tze.model.Gist
+import com.raywenderlich.android.w00tze.model.GistRequest
+import com.raywenderlich.android.w00tze.model.Repo
+import com.raywenderlich.android.w00tze.model.User
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -90,6 +95,26 @@ object RemoteRepository : Repository {
       }
 
       override fun onFailure(call: Call<Gist>, t: Throwable) {
+        liveData.value = Either.error(ApiError.POST_GIST, null)
+      }
+    })
+
+    return liveData
+  }
+
+  override fun deleteGist(gist: Gist): LiveData<Either<EmptyResponse>> {
+    val liveData = MutableLiveData<Either<EmptyResponse>>()
+
+    api.deleteGist(gist.id).enqueue(object : Callback<EmptyResponse> {
+      override fun onResponse(call: Call<EmptyResponse>, response: Response<EmptyResponse>?) {
+        if (response != null && response.isSuccessful) {
+          liveData.value = Either.success(response.body())
+        } else {
+          liveData.value = Either.error(ApiError.POST_GIST, null)
+        }
+      }
+
+      override fun onFailure(call: Call<EmptyResponse>, t: Throwable) {
         liveData.value = Either.error(ApiError.POST_GIST, null)
       }
     })

@@ -43,6 +43,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.raywenderlich.android.w00tze.R
+import com.raywenderlich.android.w00tze.model.EmptyResponse
 import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.repository.ApiError
 import com.raywenderlich.android.w00tze.repository.Either
@@ -91,7 +92,15 @@ class GistsFragment : Fragment(), GistAdapter.GistAdapterListener {
   }
 
   override fun deleteGist(gist: Gist) {
-    // TODO: call view model
+    gistsViewModel.deleteGist(gist).observe(this, Observer<Either<EmptyResponse>> { either ->
+      if (either?.status == Status.SUCCESS && either.data != null) {
+        adapter.deleteGist(gist)
+      } else {
+        if (either?.error == ApiError.DELETE_GIST) {
+          Toast.makeText(context, "Error deleting gists", Toast.LENGTH_SHORT).show()
+        }
+      }
+    })
   }
 
   internal fun sendGist(description: String, filename: String, content: String) {

@@ -32,6 +32,7 @@
 package com.raywenderlich.android.w00tze.repository
 
 import android.arch.lifecycle.LiveData
+import com.raywenderlich.android.w00tze.model.EmptyResponse
 import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.model.GistRequest
 import com.raywenderlich.android.w00tze.model.Repo
@@ -42,5 +43,6 @@ interface Repository {
   fun getGists(): LiveData<Either<List<Gist>>>
   fun getUser(): LiveData<Either<User>>
   fun postGist(request: GistRequest): LiveData<Either<Gist>>
+  fun deleteGist(gist: Gist): LiveData<Either<EmptyResponse>>
 }
 
