@@ -9,6 +9,7 @@ import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.model.GistRequest
 import com.raywenderlich.android.w00tze.model.Repo
 import com.raywenderlich.android.w00tze.model.User
+import com.raywenderlich.android.w00tze.model.UserRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -116,6 +117,26 @@ object RemoteRepository : Repository {
 
       override fun onFailure(call: Call<EmptyResponse>, t: Throwable) {
         liveData.value = Either.error(ApiError.POST_GIST, null)
+      }
+    })
+
+    return liveData
+  }
+
+  override fun updateCompany(request: UserRequest): LiveData<Either<User>> {
+    val liveData = MutableLiveData<Either<User>>()
+
+    api.updateCompany(request).enqueue(object : Callback<User> {
+      override fun onResponse(call: Call<User>?, response: Response<User>?) {
+        if (response != null && response.isSuccessful) {
+          liveData.value = Either.success(response.body())
+        } else {
+          liveData.value = Either.error(ApiError.USER, null)
+        }
+      }
+
+      override fun onFailure(call: Call<User>, t: Throwable) {
+        liveData.value = Either.error(ApiError.USER, null)
       }
     })
 

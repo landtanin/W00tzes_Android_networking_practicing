@@ -37,6 +37,7 @@ import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.model.GistRequest
 import com.raywenderlich.android.w00tze.model.Repo
 import com.raywenderlich.android.w00tze.model.User
+import com.raywenderlich.android.w00tze.model.UserRequest
 
 interface Repository {
   fun getRepos(): LiveData<Either<List<Repo>>>
@@ -44,5 +45,6 @@ interface Repository {
   fun getUser(): LiveData<Either<User>>
   fun postGist(request: GistRequest): LiveData<Either<Gist>>
   fun deleteGist(gist: Gist): LiveData<Either<EmptyResponse>>
+  fun updateCompany(request: UserRequest): LiveData<Either<User>>
 }
 

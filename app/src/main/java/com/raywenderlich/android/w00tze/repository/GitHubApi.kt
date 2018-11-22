@@ -5,10 +5,12 @@ import com.raywenderlich.android.w00tze.model.Gist
 import com.raywenderlich.android.w00tze.model.GistRequest
 import com.raywenderlich.android.w00tze.model.Repo
 import com.raywenderlich.android.w00tze.model.User
+import com.raywenderlich.android.w00tze.model.UserRequest
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -28,5 +30,8 @@ interface GitHubApi {
 
   @DELETE("gists/{id}")
   fun deleteGist(@Path("id") gistId: String): Call<EmptyResponse>
+
+  @PATCH("user")
+  fun updateCompany(@Body body: UserRequest): Call<User>
 
 }
